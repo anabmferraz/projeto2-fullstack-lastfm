@@ -8,7 +8,6 @@ import logger from "../config/logger.js";
 
 const router = express.Router();
 
-// Middleware de autenticação (REQUISITO)
 const authMiddleware = (req, res, next) => {
   try {
     const token = req.headers.authorization?.replace("Bearer ", "");
@@ -26,7 +25,7 @@ const authMiddleware = (req, res, next) => {
 };
 
 router.post(
-  "/track",
+  "/tracks",
   authMiddleware,
   [
     body("name").trim().notEmpty().escape(),
@@ -79,7 +78,7 @@ router.post(
 );
 
 router.post(
-  "/artist",
+  "/artists",
   authMiddleware,
   [
     body("name").trim().notEmpty().escape(),

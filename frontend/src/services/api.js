@@ -1,14 +1,13 @@
 import axios from "axios";
 
 const api = axios.create({
-  baseURL: "http://localhost:5000/api",
+  baseURL: "/api",
   timeout: 10000,
   headers: {
     "Content-Type": "application/json",
   },
 });
 
-// Adicionar token automaticamente
 api.interceptors.request.use((config) => {
   const token = localStorage.getItem("token");
   if (token) {
@@ -17,7 +16,6 @@ api.interceptors.request.use((config) => {
   return config;
 });
 
-// Tratar erro de autenticação
 api.interceptors.response.use(
   (response) => response,
   (error) => {
@@ -30,7 +28,6 @@ api.interceptors.response.use(
   }
 );
 
-// Serviços de autenticação
 export const authService = {
   login: async (username, password) => {
     const response = await api.post("/auth/login", { username, password });
@@ -40,33 +37,29 @@ export const authService = {
     }
     return response.data;
   },
-
   logout: () => {
     localStorage.removeItem("token");
     localStorage.removeItem("user");
     window.location.href = "/login";
   },
-
   isAuthenticated: () => !!localStorage.getItem("token"),
 };
 
-// Serviços de busca
 export const searchService = {
   search: async () => {
-    const response = await api.get("/search");
+    const response = await api.get("/dashboard");
     return response.data;
   },
 };
 
-// Serviços de inserção
 export const insertService = {
   insertTrack: async (data) => {
-    const response = await api.post("/insert/track", data);
+    const response = await api.post("/tracks", data);
     return response.data;
   },
 
   insertArtist: async (data) => {
-    const response = await api.post("/insert/artist", data);
+    const response = await api.post("/artists", data);
     return response.data;
   },
 };
